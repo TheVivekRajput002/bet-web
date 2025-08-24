@@ -3,11 +3,11 @@ import Hero from '../Components/Hero'
 
 const Home = () => {
     return (
-        <div className='bg-[#1c1224] h-screen'>
-            <div className='p-10'>
-                <Hero />
-            </div>
+        <div className=' h-screen'>
+
         </div>
+
+        
 
     )
 }
