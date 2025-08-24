@@ -5,7 +5,7 @@ const chartData = [
   ['55', '32', '24', '29', '05', '97', '40'],
   ['29', '75', '06', '73', '70', '38', '51'],
   ['91', '33', '26', '02', '64', '56', '83'],
-  ['42', '10', '14', '73', '23', '70', '45'],
+  ['42', '60', '04', '73', '23', '70', '45'],
 ];
 
 const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -111,9 +111,9 @@ const EyeIcon = () => (
 );
 
 // Cards Component - receives props from parent
-const Cards = ({ 
-  cardData, 
-  cardNumber, 
+const Cards = ({
+  cardData,
+  cardNumber,
   theme = 'grey',
   chartData: customChartData,
   days: customDays,
@@ -129,10 +129,29 @@ const Cards = ({
   }
 
   // Use custom data or fallback to default
-  const currentChartData = customChartData || chartData;
+  const currentChartData = customChartData || cardData.chartData || chartData;
   const currentDays = customDays || days;
-  const currentStoppedNumbers = customStoppedNumbers || stoppedNumbers;
   const currentTheme = themes[theme] || themes.grey;
+
+  // Calculate stopped numbers dynamically from last row of chart data
+  const calculateStoppedNumbers = () => {
+    const lastRow = currentChartData[currentChartData.length - 1] || [];
+    const allNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+    // Get ALL digits present in the last row (not just last digits)
+    const presentNumbers = new Set();
+    lastRow.forEach(num => {
+      // Add each digit of the number to the set
+      num.split('').forEach(digit => presentNumbers.add(digit));
+    });
+
+    // Find numbers that are not present
+    const stoppedNums = allNumbers.filter(num => !presentNumbers.has(num));
+
+    return stoppedNums;
+  };
+
+  const currentStoppedNumbers = customStoppedNumbers || calculateStoppedNumbers();
 
   return (
     <div className={`mb-6 flex items-center justify-center p-1 sm:p-2 font-sans`}>
@@ -149,7 +168,9 @@ const Cards = ({
                   {cardNumber || 1}
                 </span>
                 <div className="flex justify-end">
-                  <span className="text-xl font-bold">Jodi 45</span>
+                  <span className="text-xl font-bold">
+                    Jodi {cardData.open?.split('-')[1] || '0'}{cardData.close?.split('-')[1] || '0'}
+                  </span>
                 </div>
               </div>
               <div className="mt-4">
@@ -203,11 +224,10 @@ const Cards = ({
                   {row.map((num, colIndex) => (
                     <div
                       key={colIndex}
-                      className={`text-center py-3 text-1xl font-semibold ${currentTheme.primaryText} ${
-                        rowIndex === 3 && colIndex === 6 
-                          ? `${currentTheme.specialBg} ${currentTheme.highlightText} rounded-lg` 
-                          : ''
-                      }`}
+                      className={`text-center py-3 text-1xl font-semibold ${currentTheme.primaryText} ${rowIndex === 3 && colIndex === 6
+                        ? `${currentTheme.specialBg} ${currentTheme.highlightText} rounded-lg`
+                        : ''
+                        }`}
                     >
                       {num}
                     </div>
@@ -220,11 +240,10 @@ const Cards = ({
               {currentDays.map((day, dayIndex) => (
                 <div
                   key={dayIndex}
-                  className={`text-center py-2 text-xl font-bold ${
-                    dayIndex === 6 
-                      ? `${currentTheme.highlight} ${currentTheme.highlightText} rounded-md` 
-                      : `${currentTheme.accentText}`
-                  }`}
+                  className={`text-center py-2 text-xl font-bold ${dayIndex === 6
+                    ? `${currentTheme.highlight} ${currentTheme.highlightText} rounded-md`
+                    : `${currentTheme.accentText}`
+                    }`}
                 >
                   {day}
                 </div>
