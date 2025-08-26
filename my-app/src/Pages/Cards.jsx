@@ -1,12 +1,5 @@
 import React from 'react';
-
-// Static chart data for demonstration
-const chartData = [
-  ['55', '32', '24', '29', '05', '97', '40'],
-  ['29', '75', '06', '73', '70', '38', '51'],
-  ['91', '33', '26', '02', '64', '56', '83'],
-  ['42', '60', '04', '73', '23', '70', '45'],
-];
+import { Link } from 'react-router-dom';
 
 const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const stoppedNumbers = ['6', '8', '9'];
@@ -129,7 +122,7 @@ const Cards = ({
   }
 
   // Use custom data or fallback to default
-  const currentChartData = customChartData || cardData.chartData || chartData;
+  const currentChartData = (customChartData || cardData.chartData || chartData).slice(-4);
   const currentDays = customDays || days;
   const currentTheme = themes[theme] || themes.grey;
 
@@ -208,14 +201,22 @@ const Cards = ({
 
           <main className={`${currentTheme.panelBg} p-4 sm:p-6 border-t-2 ${currentTheme.borderColor}`}>
             <div className="flex justify-center items-center space-x-2 sm:space-x-4 mb-6">
-              <button className={`border ${currentTheme.buttonBorder} ${currentTheme.buttonText} py-2 px-4 sm:px-6 rounded-full flex items-center space-x-2 ${currentTheme.buttonHover} transition-colors text-sm sm:text-base`}>
+              <Link
+                to={`/panel-chart/${cardData.id}`}
+                state={{ chartData: currentChartData, cardData: cardData }}
+                className={`border ${currentTheme.buttonBorder} ${currentTheme.buttonText} py-2 px-4 sm:px-6 rounded-full flex items-center space-x-2 ${currentTheme.buttonHover} transition-colors text-sm sm:text-base`}
+              >
                 <EyeIcon />
                 <span>Panel Chart</span>
-              </button>
-              <button className={`border ${currentTheme.buttonBorder} ${currentTheme.buttonText} py-2 px-4 sm:px-6 rounded-full flex items-center space-x-2 ${currentTheme.buttonHover} transition-colors text-sm sm:text-base`}>
+              </Link>
+              <Link
+                to={`/panel-chart/${cardData.id}`}
+                state={{ chartData: currentChartData, cardData: cardData }}
+                className={`border ${currentTheme.buttonBorder} ${currentTheme.buttonText} py-2 px-4 sm:px-6 rounded-full flex items-center space-x-2 ${currentTheme.buttonHover} transition-colors text-sm sm:text-base`}
+              >
                 <EyeIcon />
                 <span>Jodi Chart</span>
-              </button>
+              </Link>
             </div>
 
             <div className={`divide-y ${currentTheme.dividerColor}`}>

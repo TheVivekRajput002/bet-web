@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import './App.css'
-import Home from './Pages/Home'
+import { Routes, Route } from 'react-router-dom';
+import Home from './Pages/Home';
+import PanelChart from './Pages/PanelChart';
 
 function App() {
-
   return (
-    <>
-          <Home />
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/panel-chart/:cardId" element={<PanelChart />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
